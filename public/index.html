@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Practice Tasks</title>
+</head>
+
+<body>
+    <h1>Practice Tasks</h1>
+    <form id="task-form" novalidate>
+        <label for="title">Task title</label>
+        <input id="title" name="title">
+        <button type="submit">Add task</button>
+    </form>
+    <p id="message" role="status"></p>
+    <ul id="tasks"></ul>
+    <script>
+        const form = document.getElementById('task-form');
+        const message = document.getElementById('message');
+        const list = document.getElementById('tasks');
+
+        async function refresh() {
+            const tasks = await (await fetch('/api/tasks')).json();
+            list.innerHTML = '';
+            for (const task of tasks) {
+                const item = document.createElement('li');
+                item.textContent = task.title;
+                list.appendChild(item);
+            }
+        }
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const title = document.getElementById('title').value.trim();
+            if (!title) {
+                message.textContent = 'Title is required';
+                return;
+            }
+            await fetch('/api/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title })
+            });
+            message.textContent = 'Task added';
+            form.reset();
+            refresh();
+        });
+
+        refresh();
+    </script>
+</body>
+
+</html>

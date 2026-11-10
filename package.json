@@ -1,0 +1,13 @@
+{
+    "name": "build-practice-tasks",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "start": "node src/server.js",
+        "test": "node --test",
+        "test:slow": "node scripts/wait.js 90 && node --test",
+        "wait:short": "node scripts/wait.js 30",
+        "wait:long": "node scripts/wait.js 90"
+    }
+}
